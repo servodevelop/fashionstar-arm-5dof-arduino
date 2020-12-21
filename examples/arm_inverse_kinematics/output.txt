@@ -1,0 +1,6 @@
+Test Forward Kinematics
+Tool Posi: X= 9.5, Y= 9.5, Z= 6.4
+Test Inverse Kinematics
+Pitch = 20.00 deg
+code = 0
+thetas = [45.00, -130.00, 90.00, 60.00]

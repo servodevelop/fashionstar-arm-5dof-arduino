@@ -1,0 +1,3 @@
+Test Forward Kinematics
+Tool Posi: X= 9.5, Y= 9.5, Z= 6.4
+Pitch: 20.00deg
