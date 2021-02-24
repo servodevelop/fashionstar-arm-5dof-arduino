@@ -2,7 +2,7 @@
  * 机械臂再阻尼模式下, 读取关节角度, 并打印末端的位姿
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/05/07
  */
 #include <SoftwareSerial.h>

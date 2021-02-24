@@ -2,7 +2,7 @@
  * 测试机械臂正向运动学
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/04/23
  */
 #include <SoftwareSerial.h>

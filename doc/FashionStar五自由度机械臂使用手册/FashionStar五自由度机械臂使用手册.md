@@ -6,7 +6,7 @@
 
 作者: 阿凯|Kyle
 
-邮箱: xingshunkai@qq.com
+邮箱: kyle.xing@fashionstar.com.hk
 
 更新时间: 2020/05/07
 
@@ -138,7 +138,7 @@ void loop(){
  * 同时也会打印机械臂关节角度(Arm Joint Angles)
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/05/07
  */
 #include <SoftwareSerial.h>
@@ -344,7 +344,7 @@ arm.home();
  * 机械臂末端移动到Home的位置
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/05/07
  */
 
@@ -424,7 +424,7 @@ arm.wait();            // 等待舵机旋转到目标位置
  * 设置机械臂关节的角度
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/05/07
  */
 #include "FashionStar_Arm5DoF.h"
@@ -525,7 +525,7 @@ arm.forwardKinematics(thetas, &toolPosi, &pitch); // 正向运动学
  * 测试机械臂正向运动学
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/04/23
  */
 #include <SoftwareSerial.h>
@@ -590,7 +590,7 @@ Pitch: 20.00deg
  * 机械臂再阻尼模式下, 读取关节角度, 并打印末端的位姿
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/05/07
  */
 #include <SoftwareSerial.h>
@@ -715,7 +715,7 @@ FSARM_STATUS code = arm.inverseKinematics(toolPosi, pitch, &thetas);
  * 测试机械臂逆向运动学
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/05/07
  */
 
@@ -848,7 +848,7 @@ arm.wait();
  * 测试机械臂点控, 从一个点运动到另外一个点
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/05/07
  */
 #include "FashionStar_Arm5DoF.h"
@@ -883,7 +883,7 @@ void loop(){
  * 将物块从一个位置移动到另外一个位置
  * --------------------------
  * 作者: 阿凯|Kyle
- * 邮箱: xingshunkai@qq.com
+ * 邮箱: kyle.xing@fashionstar.com.hk
  * 更新时间: 2020/05/07
  */
 #include "FashionStar_Arm5DoF.h"
