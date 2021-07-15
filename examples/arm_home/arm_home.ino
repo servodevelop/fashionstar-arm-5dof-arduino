@@ -7,7 +7,6 @@
  */
 
 #include "FashionStar_Arm5DoF.h"
-
 FSARM_ARM5DoF arm; //机械臂对象
 
 
@@ -17,5 +16,4 @@ void setup(){
 }
 
 void loop(){
-    
 }

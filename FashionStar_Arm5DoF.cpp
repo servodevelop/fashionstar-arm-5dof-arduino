@@ -15,9 +15,13 @@ void FSARM_ARM5DoF::init(){
 
 // 初始化舵机
 void FSARM_ARM5DoF::initServos(){
+    // 本体舵机初始化
     for(uint8_t sidx=0; sidx < FSARM_SERVO_NUM; sidx++){
         this->servos[sidx].init(sidx, &this->protocol);
     }
+    // 自适应夹爪初始化
+    this->gripper_servo.init(GRIPPER_SERVO_ID, &this->protocol);
+    this->gripper.init(&this->gripper_servo, GRIPPER_SERVO_ANGLE_OPEN, GRIPPER_SERVO_ANGLE_CLOSE);
 }
 
 // 关节标定
@@ -26,7 +30,7 @@ void FSARM_ARM5DoF::calibration(){
     this->servos[FSARM_JOINT2].calibration(FSARM_JOINT2_P0, 0.0, FSARM_JOINT2_N90, -90.0);
     this->servos[FSARM_JOINT3].calibration(FSARM_JOINT3_P90, 90.0, FSARM_JOINT3_N90, -90.0);
     this->servos[FSARM_JOINT4].calibration(FSARM_JOINT4_P90, 90.0, FSARM_JOINT4_N90, -90.0);
-    this->servos[FSARM_GRIPPER].calibration(FSARM_GRIPPER_P0, 0.0, FSARM_GRIPPER_P90, 90.0);
+    // this->servos[FSARM_GRIPPER].calibration(FSARM_GRIPPER_P0, 0.0, FSARM_GRIPPER_P90, 90.0);
 }
 
 // 设置舵机的角度范围
@@ -35,7 +39,7 @@ void FSARM_ARM5DoF::setAngleRange(){
     this->servos[FSARM_JOINT2].setAngleRange(FSARM_JOINT2_MIN, FSARM_JOINT2_MAX);
     this->servos[FSARM_JOINT3].setAngleRange(FSARM_JOINT3_MIN, FSARM_JOINT3_MAX);
     this->servos[FSARM_JOINT4].setAngleRange(FSARM_JOINT4_MIN, FSARM_JOINT4_MAX);
-    this->servos[FSARM_GRIPPER].setAngleRange(FSARM_GRIPPER_MIN, FSARM_GRIPPER_MAX);
+    // this->servos[FSARM_GRIPPER].setAngleRange(FSARM_GRIPPER_MIN, FSARM_GRIPPER_MAX);
 }
 
 // 开启扭矩
@@ -68,7 +72,6 @@ void FSARM_ARM5DoF::queryRawAngle(FSARM_JOINTS_STATE_T* thetas){
     thetas->theta2 = this->servos[FSARM_JOINT2].queryRawAngle();
     thetas->theta3 = this->servos[FSARM_JOINT3].queryRawAngle();
     thetas->theta4 = this->servos[FSARM_JOINT4].queryRawAngle();
-    thetas->gripper = this->servos[FSARM_GRIPPER].queryRawAngle();
 
 }
 
@@ -79,7 +82,7 @@ void FSARM_ARM5DoF::queryAngle(FSARM_JOINTS_STATE_T* thetas){
     thetas->theta2 = this->servos[FSARM_JOINT2].queryAngle();
     thetas->theta3 = this->servos[FSARM_JOINT3].queryAngle();
     thetas->theta4 = this->servos[FSARM_JOINT4].queryAngle();
-    thetas->gripper = this->servos[FSARM_GRIPPER].queryAngle();
+    // thetas->gripper = this->servos[FSARM_GRIPPER].queryAngle();
 }
 
 // 设置舵机的原始角度
@@ -88,7 +91,7 @@ void FSARM_ARM5DoF::setRawAngle(FSARM_JOINTS_STATE_T thetas){
     this->servos[FSARM_JOINT2].setRawAngle(thetas.theta2);
     this->servos[FSARM_JOINT3].setRawAngle(thetas.theta3);
     this->servos[FSARM_JOINT4].setRawAngle(thetas.theta4);
-    this->servos[FSARM_GRIPPER].setRawAngle(thetas.gripper);
+    // this->servos[FSARM_GRIPPER].setRawAngle(thetas.gripper);
 }
 
 // 设置舵机的角度
@@ -97,7 +100,7 @@ void FSARM_ARM5DoF::setAngle(FSARM_JOINTS_STATE_T thetas){
     this->servos[FSARM_JOINT2].setAngle(thetas.theta2);
     this->servos[FSARM_JOINT3].setAngle(thetas.theta3);
     this->servos[FSARM_JOINT4].setAngle(thetas.theta4);
-    this->servos[FSARM_GRIPPER].setAngle(thetas.gripper);
+    // this->servos[FSARM_GRIPPER].setAngle(thetas.gripper);
 }
 
 // 设置爪子的角度(关节角度)
@@ -111,7 +114,7 @@ void FSARM_ARM5DoF::setAngle(FSARM_JOINTS_STATE_T thetas, uint16_t interval){
     this->servos[FSARM_JOINT2].setAngle(thetas.theta2, interval);
     this->servos[FSARM_JOINT3].setAngle(thetas.theta3, interval);
     this->servos[FSARM_JOINT4].setAngle(thetas.theta4, interval);
-    this->servos[FSARM_GRIPPER].setAngle(thetas.gripper, interval);
+    // this->servos[FSARM_GRIPPER].setAngle(thetas.gripper, interval);
 }
 
 // 机械臂正向运动学
@@ -261,4 +264,16 @@ void FSARM_ARM5DoF::getToolPose(FSARM_POINT3D_T *toolPosi, float *pitch){
     FSARM_JOINTS_STATE_T thetas;
     queryAngle(&thetas);
     forwardKinematics(thetas, toolPosi, pitch);
+}
+
+
+// 夹爪张开
+void FSARM_ARM5DoF::gripperOpen(){
+    this->gripper.setAngle(GRIPPER_SERVO_ANGLE_OPEN, GRIPPER_INTERVAL_MS, GRIPPER_MAX_POWER);
+    delay(GRIPPER_INTERVAL_MS);
+}
+// 夹爪闭合
+void FSARM_ARM5DoF::gripperClose(){
+    this->gripper.setAngle(GRIPPER_SERVO_ANGLE_CLOSE, GRIPPER_INTERVAL_MS, GRIPPER_MAX_POWER);
+    delay(GRIPPER_INTERVAL_MS);
 }

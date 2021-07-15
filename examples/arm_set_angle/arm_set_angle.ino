@@ -26,7 +26,7 @@ void loop(){
     arm.wait();            // 等待舵机旋转到目标位置
     
     delay(1000); // 等待1s
-
+    
     thetas.theta1 = 90.0;
     thetas.gripper = 0.0; // 爪子的角度
     arm.setAngle(thetas);  // 设置舵机旋转到特定的角度

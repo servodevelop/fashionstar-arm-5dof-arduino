@@ -3,6 +3,7 @@
 #include "Arduino.h"
 #include "FashionStar_UartServoProtocol.h"
 #include "FashionStar_UartServo.h"
+#include "FashionStar_SmartGripper.h"
 
 // 状态码
 #define FSARM_STATUS uint8_t
@@ -15,12 +16,11 @@
 #define FSARM_STATUS_TOOLPOSI_TOO_FAR 6 // 工具坐标目标点距离机械臂太遥远
 
 // 机械臂常量
-#define FSARM_SERVO_NUM 5   // 机械臂舵机的个数
+#define FSARM_SERVO_NUM 4   // 机械臂舵机的个数
 #define FSARM_JOINT1 0      // 关节1对应的舵机ID
 #define FSARM_JOINT2 1      // 关节2对应的舵机ID
 #define FSARM_JOINT3 2      // 关节3对应的舵机ID
 #define FSARM_JOINT4 3      // 关节4对应的舵机ID
-#define FSARM_GRIPPER 4     // 爪子对应的舵机ID
 
 #define FSARM_LINK1 9.5     // 连杆1的长度 单位cm (关节2原点距离桌面的高度, 没用到)
 #define FSARM_LINK2 8       // 连杆2的长度 单位cm
@@ -36,8 +36,14 @@
 #define FSARM_JOINT3_N90 130.90  //关节3为-90°时的舵机原始角度
 #define FSARM_JOINT4_P90 -93.4   //关节4为90°时的舵机原始角度
 #define FSARM_JOINT4_N90 84.3    //关节4为-90°时的舵机原始角度
-#define FSARM_GRIPPER_P0 -0.30   //爪子闭合的角度 关节角度为0
-#define FSARM_GRIPPER_P90 93.80  //爪子完全张开的角度 关节角度为90度
+
+// 爪子的配置
+#define GRIPPER_SERVO_ID 4              // 爪子对应的舵机ID
+#define GRIPPER_SERVO_ANGLE_OPEN 15.0   // 爪子张开时的角度
+#define GRIPPER_SERVO_ANGLE_CLOSE -45.0 // 爪子闭合时的角度
+#define GRIPPER_INTERVAL_MS 1000        // 爪子开启闭合的周期, ms
+#define GRIPPER_MAX_POWER 400           // 爪子的最大功率
+                                        // 注:对于大功率的舵机需要调大这个值 
 
 // 爪子的标定数据
 #define FSARM_GRIPPER_CLOSE -0.30 // 
@@ -52,8 +58,8 @@
 #define FSARM_JOINT3_MAX 160.0 
 #define FSARM_JOINT4_MIN -135.0
 #define FSARM_JOINT4_MAX 135.0
-#define FSARM_GRIPPER_MIN 0.0
-#define FSARM_GRIPPER_MAX 90.0
+// #define FSARM_GRIPPER_MIN 0.0
+// #define FSARM_GRIPPER_MAX 90.0
 
 // HOME(机械零点的位置)
 #define FSARM_HOME_X 13.5
@@ -87,7 +93,7 @@ typedef struct{
     float theta2;
     float theta3;
     float theta4;
-    float gripper;
+    // float gripper;
 }FSARM_JOINTS_STATE_T;
 
 class FSARM_ARM5DoF{
@@ -140,10 +146,15 @@ public:
     void wait();
     // 更新末端的位置
     void getToolPose(FSARM_POINT3D_T *toolPosi, float *pitch);
-    
+    // 夹爪张开
+    void gripperOpen();
+    // 夹爪闭合
+    void gripperClose();
     // FSARM_POINT3D_T curEndPosi; // 末端当前在机械臂基坐标系下的位置
     FSUS_Protocol protocol; // 舵机串口通信协议
     FSUS_Servo servos[FSARM_SERVO_NUM]; // 舵机列表
+    FSUS_Servo gripper_servo;           // 爪子对应的舵机
+    FSGP_Gripper gripper;               // 自适应夹爪对象
     bool _isIdle; // 机械臂是否空闲
     // FSPUMP_Pump pump; // 气泵
 private:
