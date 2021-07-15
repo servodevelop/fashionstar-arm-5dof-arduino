@@ -1,4 +1,4 @@
-# FashionStar五自由度机械臂使用手册
+# FashionStar五自由度机械臂使用手册(Arduino)
 
 
 
@@ -8,127 +8,165 @@
 
 邮箱: kyle.xing@fashionstar.com.hk
 
-更新时间: 2020/05/07
+更新时间: 2021/07/15
 
 
 
-## 安装机械臂的Arduino库
-
-将`FashionStar_Arm5DoF`这个工程文件, 整体拷贝到`Arduino IDE` 安装路径下的`libraries` 这个文件夹.
 
 
+## `准备工作`机械臂舵机ID分配
 
-## Arduino Uno固件烧录的操作流程
+在使用机械臂前，必须通过上位机对舵机的ID进行分配。 具体操作方法参阅[UART串行总线舵机使用手册](https://wiki.fashionrobo.com/uartbasic/) > [UART串行总线舵机使用手册UART串行总线舵机上位机软件使用说明](https://wiki.fashionrobo.com/uartbasic/uart-servo-software/) 里面的 **9. 修改舵机ID**
 
-1. 将Arduino UNO与PC相连
+注意，修改ID的时候，串口舵机转接板上面一次只连接一个舵机.
 
-2. 断开Arduino UNO拓展版的外接电源的开关.
-
-   开关拨至`OFF`
-
-   ![](image/外界电源开关.jpg)
-
-   
-
-3. 在PC端打开Arduino IDE, 打开机械臂的例程文件.
-
-   `Arduino IDE > Examples > FashionStar_ARM5DoF`
-
-4. 编译并烧录固件至Arduino UNO
-
-5. 打开Arduino UNO拓展板的外接电源的开关
-
-   开关拨至`ON`
-
-6. 按下Arduino UNO拓展版上的`RESET`按键. 
-
-   **注: 一定要记得按下RESET键**
+![image-20210715171459879](image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /image-20210715171459879.png)
 
 
 
-## 软串口日志输出
+机械臂舵机ID分配如下: 
 
-### 简介
-
-因为Arduino Uno的硬件串口`Hardware Serial`会被串口舵机占用, 所以我们需要使用`Soft Serial` 来做日志输出.
-
-### 操作流程
-
-1. 安装USB转TTL模块的驱动程序.
-
-2. 将Arduino跟USB转TTL模块通过杜邦线相连
-
-   | Arduino UNO             | USB转TTL模块                |
-   | ----------------------- | --------------------------- |
-   | pin 6 (软串口RX 接收端) | Tx (USB转TTL模块的接收端)   |
-   | pin7 (软串口Tx 发送端)  | Rx （USB转TTL模块的发送端） |
-   | GND                     | GND                         |
-
-   *实物图*
-
-   ![](./image/Arduino软串口USB转TTL模块实物图.jpg)
-
-3. 将USB转TTL模块插入到电脑的USB口上
-
-4. 打开串口调试助手, 选择USB转TTL模块的端口号, 配置如下
-
-   ![](./image/串口调试助手的配置.png)
-
-   点击`Open` ,  打开端口.
-
-5. 打开`Arduino IDE > Examples > FashionStar_ARM4DoF >  software_serial` 
-
-   将例程烧录到Arduino UNO 里面.
-
-6. 查看运行效果 
-
-   ![](./image/test_software_serial.png)
-
-### 例程源码
-
-`software_serial.ino`
-
-```cpp
-/*
- * 测试软串口
- * 
- * <接线方式>
- * - Arduino Pin 6(软串口RX)  -> USB转TTL TX
- * - Arduino Pin 7(软串口TX)  -> USB转TTL RX
- * - Arduino GND              -> USB转TTL GND
- */
-#include <SoftwareSerial.h>
-
-// 软串口的配置
-#define SOFT_SERIAL_RX 6
-#define SOFT_SERIAL_TX 7
-#define SOFT_SERIAL_BAUDRATE 4800
-// 创建软串口
-SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX);
-
-void setup(){
-    
-    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化串口的波特率
-}
-
-void loop(){
-    //发送一个数据
-    softSerial.print("Hello World\n");
-    delay(1000);
-}
-```
+![机械臂舵机ID分配](image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /机械臂舵机ID分配.png)
 
 
 
-## 阻尼模式
+
+
+## `准备工作`安装机械臂的依赖库
+
+
+
+需要的Arduino库文件列表如下: 
+
+* [FashionStar串口总线舵机 SDK （Arduino版）`fashionstar-uart-servo-arduino`](https://github.com/servodevelop/fashionstar-uart-servo-arduino)
+* [FashionStar智能夹爪 SDK(Arduino版) `fashionstar-gripper-arduino`](https://github.com/servodevelop/fashionstar-gripper-arduino)
+* [FashionStar五自由度机械臂 (Arduino版) `fashionstar-arm-5dof-arduino`](https://github.com/servodevelop/fashionstar-arm-5dof-arduino)
+
+
+
+将依赖的代码仓库, 整体拷贝到`Arduino IDE` 安装路径下的`libraries` 这个文件夹. 
+
+![image-20210715163230065](image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /image-20210715163230065.png)
+
+机械臂的Arduino SDK 适配了如下硬件平台
+
+* Arduino Uno
+* Arduino Mega 2560
+* Arduino ESP32
+
+
+
+例程的使用方法，烧录过程， 需要参阅串口总线舵机SDK工程文件里面的文档, 根据你所使用的平台， 查看不同的文档
+
+[串口总线舵机 Arduino SDK 使用文档](https://github.com/servodevelop/fashionstar-uart-servo-arduino/tree/master/doc)
+
+![image-20210715163448949](image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /image-20210715163448949.png)
+
+
+
+## `准备工作`机械臂标定
 
 ### 简介
+
+通过阻尼模式例程，采集特定关节在特定角度下的原始舵机角度, 并同步修改`FashionStar_Arm4DoF.h` 里面的相关配置
+
+### 世界坐标系
+
+机械臂的世界坐标系/机械臂基坐标系定义如下:
+
+<img src="./image/世界坐标系.png" style="zoom:50%;" />
+
+
+
+世界坐标系的原点定义在#1号舵机的转轴中心处, 机械臂正前方为X轴, 上方为Z轴, Y轴指向纸面朝外.
+
+
+
+关于机器人的坐标系相关的基础知识，可以参考教程 [机器人的坐标系](https://zhuanlan.zhihu.com/p/161122231)
+
+
+
+### 机械臂关节与关节坐标系定义
+
+关节与关节坐标系定义如下图所示:
+
+<img src="./image/机械臂关节定义.png" style="zoom:50%;" />
+
+#### 关节1
+
+
+
+$\theta_1 = \frac{\pi}{2}$
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /DB5D8DB49BD7C8A235AC314773751D37.jpg" alt="img" style="zoom: 15%;" />
+
+$\theta_1 = -\frac{\pi}{2}$
+
+
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /134ACCC84B83AAC62CF96C970BBA05D7.jpg" alt="img" style="zoom:15%;" />
+
+#### 关节2
+
+$\theta_2 = 0$
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /F96DE156CDA3E8B61A279ABF032E2767.jpg" alt="img" style="zoom:15%;" />
+
+$\theta_2 = -\frac{\pi}{2}$
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /E0F61B34619EECD80B5043B2C4F4503C.jpg" alt="img" style="zoom:15%;" />
+
+#### 关节3
+
+
+
+$\theta_3 = \frac{\pi}{2}$
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /D90DC29A7EFEFAB511D57F297A306E6B.jpg" alt="img" style="zoom:15%;" />
+
+
+
+$\theta_3 = -\frac{\pi}{2}$
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /00498A3F7400FF51225146856FD89D26.jpg" alt="img" style="zoom:15%;" />
+
+
+
+#### 关节4
+
+$\theta_4 = \frac{\pi}{2}$ 
+
+
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /5B3C54CEFEE289E7C614F74C4242251D.jpg" alt="img" style="zoom:15%;" />
+
+$\theta_4 = -\frac{\pi}{2}$ 
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /7635ECD719CF88D7F5D3FF5AC1586CEA.jpg" alt="img" style="zoom:15%;" />
+
+
+
+#### 机械爪
+
+机械爪闭合角度
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /image-20210715164248005.png" alt="image-20210715164248005" style="zoom:33%;" />
+
+机械爪的张开角度没有特定的角度要求，可以根据抓取物料的大小动态修改
+
+<img src="image/FashionStar五自由度机械臂使用手册(Arduino Mega2560) /image-20210715164309696.png" alt="image-20210715164309696" style="zoom: 33%;" />
+
+
+
+### 机械臂阻尼模式例程
+
+
 
 设置舵机为阻尼模式, 并不断的查询舵机的原始角度。用手掰舵机, 查看舵机原始角度的变化.
 
 
 
-### 例程源码-阻尼模式与舵机原始角度回读
+#### 例程源码-阻尼模式与舵机原始角度回读
 
 `arm_dammping_mode.ino`
 
@@ -139,36 +177,50 @@ void loop(){
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/05/07
+ * 更新时间: 2021/07/15
  */
-#include <SoftwareSerial.h>
 #include "FashionStar_Arm5DoF.h"
 
-// 软串口的配置
-#define SOFT_SERIAL_RX 6
-#define SOFT_SERIAL_TX 7
-#define SOFT_SERIAL_BAUDRATE 4800
+// 调试串口的配置
+#if defined(ARDUINO_AVR_UNO)
+    #include <SoftwareSerial.h>
+    #define SOFT_SERIAL_RX 6
+    #define SOFT_SERIAL_TX 7
+    SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX); // 创建软串口
+    #define DEBUG_SERIAL softSerial
+    #define DEBUG_SERIAL_BAUDRATE 4800
+#elif defined(ARDUINO_AVR_MEGA2560)
+    #define DEBUG_SERIAL Serial
+    #define DEBUG_SERIAL_BAUDRATE 115200
+#elif defined(ARDUINO_ARCH_ESP32)
+    #define DEBUG_SERIAL Serial
+    #define DEBUG_SERIAL_BAUDRATE 115200
+#endif 
 
-SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX); // 创建软串口
 FSARM_ARM5DoF arm; //机械臂对象
 
 void setup(){
-    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化串口的波特率
+    DEBUG_SERIAL.begin(DEBUG_SERIAL_BAUDRATE); // 初始化串口的波特率
     arm.init(); //机械臂初始化
     arm.setDamping(); //设置舵机为阻尼模式
 }
 
 void loop(){
-    FSARM_JOINTS_STATE_T thetas;
-    arm.queryRawAngle(&thetas); //更新舵机角度
+    FSARM_JOINTS_STATE_T thetas;    // 关节的原始角度
+    float gripper_raw_angle;        // 爪子的原始角度
+
+    arm.queryRawAngle(&thetas);     // 查询并更新关节舵机的原始角度
+    gripper_raw_angle = arm.gripper_servo.queryRawAngle(); // 查询爪子的原始角度
+
     //打印机械臂当前的舵机角度(原始)
-    String message = "Servo Raw Angles: [ "+ String(thetas.theta1, 2)+\
+    String message = "Servo Raw Angles: [ "+ \
+         String(thetas.theta1, 2) + \
          ", " + String(thetas.theta2, 2) + \
          ", " + String(thetas.theta3, 2) + \
          ", " + String(thetas.theta4, 2) + \
-         ", " + String(thetas.gripper, 2) + " ]";
+         ", " + String(gripper_raw_angle, 2) + " ]";
 
-    softSerial.println(message);    
+    DEBUG_SERIAL.println(message);    
     delay(500);
 
     // 打印机械臂当前的关节角度
@@ -176,90 +228,31 @@ void loop(){
     message = "Arm Joint Angles: [ "+ String(thetas.theta1, 2)+\
          ", " + String(thetas.theta2, 2) + \
          ", " + String(thetas.theta3, 2) + \
-         ", " + String(thetas.theta4, 2) + \
-         ", " + String(thetas.gripper, 2) + " ]";
+         ", " + String(thetas.theta4, 2) + " ]";
     
-    softSerial.println(message);    
+    DEBUG_SERIAL.println(message);    
     delay(500);
 }
 ```
 
 **日志输出**
 
+注意在输出机械臂关节角度的时候，不包含爪子的角度。
+
+舵机原始角度(Servo Raw Angles)依次分别为` [关节1舵机原始角度,  关节2舵机原始角度,  关节3舵机原始角度, 关节4舵机原始角度,  爪子舵机原始角度]`
+
 ```
 Servo Raw Angles: [ 44.32, 44.32, 44.32, 44.32, 44.32 ]
-Arm Joint Angles: [ -42.86, -46.53, -1.65, -2.94, -1.29 ]
+Arm Joint Angles: [ -42.86, -46.53, -1.65, -2.94 ]
 Servo Raw Angles: [ -1.65, -1.65, -1.65, -1.65, -1.65 ]
-Arm Joint Angles: [ 4.33, -92.55, 45.26, -50.45, 43.57 ]
+Arm Joint Angles: [ 4.33, -92.55, 45.26, -50.45]
 Servo Raw Angles: [ 45.26, 45.26, 45.26, 45.26, 45.26 ]
-Arm Joint Angles: [ -43.83, -45.60, -2.61, -1.97, -2.21 ]
+Arm Joint Angles: [ -43.83, -45.60, -2.61, -1.97]
 Servo Raw Angles: [ -2.61, -2.61, -2.61, -2.61, -2.61 ]
-Arm Joint Angles: [ 5.31, -93.51, 46.23, -51.44, 44.50 ]
+Arm Joint Angles: [ 5.31, -93.51, 46.23, -51.44]
 Servo Raw Angles: [ 46.23, 46.23, 46.23, 46.23, 46.23 ]
-Arm Joint Angles: [ -44.83, -44.62, -3.60, -0.96, -3.16 ]
+Arm Joint Angles: [ -44.83, -44.62, -3.60, -0.96]
 ```
-
-
-
-
-
-## 机械臂标定
-
-### 简介
-
-通过阻尼模式例程，采集特定关节在特定角度下的原始舵机角度, 并同步修改`FashionStar_Arm4DoF.h` 里面的相关配置.
-
-### 机械臂舵机ID分配
-
-机械臂舵机ID分配如下: 
-
-![](./image/舵机ID分配.png)
-
-补充: 爪子的ID号是4
-
-
-
-### 世界坐标系
-
-机械臂的世界坐标系/机械臂基坐标系定义如下:
-
-![](./image/世界坐标系.png)
-
-
-
-世界坐标系的原点定义在#1号舵机的转轴中心处, 机械臂正前方为X轴, 上方为Z轴, Y轴指向纸面朝外.
-
-### 机械臂关节与关节坐标系定义
-
-关节与关节坐标系定义如下图所示:
-
-![](./image/机械臂关节定义.png)
-
-
-
-![](./image/关节1的弧度.png)
-
-
-
-![](./image/关节2的弧度.png)
-
-
-
-![](./image/关节3的弧度.png)
-
-
-
-![](./image/关节4的弧度.png)
-
-爪子的角度定义:
-
-爪子关节为0度的时候， 爪子闭合.
-
-<img src="./image/IMG_20200507_201413.jpg" style="zoom:15%;" />
-
-爪子关节为90度的时候,  爪子张开.
-
-![](./image/IMG_20200507_201401.jpg)
 
 
 
@@ -279,8 +272,13 @@ Arm Joint Angles: [ -44.83, -44.62, -3.60, -0.96, -3.16 ]
 #define FSARM_JOINT3_N90 130.90  //关节3为-90°时的舵机原始角度
 #define FSARM_JOINT4_P90 -93.4   //关节4为90°时的舵机原始角度
 #define FSARM_JOINT4_N90 84.3    //关节4为-90°时的舵机原始角度
-#define FSARM_GRIPPER_P0 -0.30   //爪子闭合的角度 关节角度为0
-#define FSARM_GRIPPER_P90 93.80  //爪子完全张开的角度 关节角度为90度
+```
+
+爪子相关的角度
+
+```c++
+#define GRIPPER_SERVO_ANGLE_OPEN 15.0   // 爪子张开时的角度
+#define GRIPPER_SERVO_ANGLE_CLOSE -45.0 // 爪子闭合时的角度
 ```
 
 
@@ -345,11 +343,10 @@ arm.home();
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/05/07
+ * 更新时间: 2021/07/15
  */
 
 #include "FashionStar_Arm5DoF.h"
-
 FSARM_ARM5DoF arm; //机械臂对象
 
 
@@ -359,7 +356,6 @@ void setup(){
 }
 
 void loop(){
-    
 }
 ```
 
@@ -383,7 +379,6 @@ typedef struct{
     float theta2;
     float theta3;
     float theta4;
-    float gripper;
 }FSARM_JOINTS_STATE_T;
 ```
 
@@ -400,7 +395,6 @@ thetas.theta1 = 45.0;
 thetas.theta2 = -130.0;
 thetas.theta3 = 90.0;
 thetas.theta4 = 60.0;
-thetas.gripper = 45.0; // 爪子的
 ```
 
 设置舵机旋转到特定的角度
@@ -425,7 +419,7 @@ arm.wait();            // 等待舵机旋转到目标位置
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/05/07
+ * 更新时间: 2021/07/15
  */
 #include "FashionStar_Arm5DoF.h"
 
@@ -441,7 +435,6 @@ void loop(){
     thetas.theta2 = -130.0;
     thetas.theta3 = 90.0;
     thetas.theta4 = 60.0;
-    thetas.gripper = 45.0; // 爪子的角度
 
     // 设置
     arm.setAngle(thetas);  // 设置舵机旋转到特定的角度
@@ -449,8 +442,11 @@ void loop(){
     
     delay(1000); // 等待1s
 
-    thetas.theta1 = 90.0;
-    thetas.gripper = 0.0; // 爪子的角度
+    thetas.theta1 = -90.0;
+    thetas.theta2 = -130.0;
+    thetas.theta3 = 120.0;
+    thetas.theta4 = 30.0;
+    
     arm.setAngle(thetas);  // 设置舵机旋转到特定的角度
     arm.wait();            // 等待舵机旋转到目标位置
     delay(1000);
@@ -506,8 +502,6 @@ thetas.theta1 = 45.0;
 thetas.theta2 = -130.0;
 thetas.theta3 = 90.0;
 thetas.theta4 = 60.0;
-thetas.gripper = 0.0; // 爪子闭合
-
 FSARM_POINT3D_T toolPosi; // 末端的位置
 float pitch;
 
@@ -520,22 +514,34 @@ arm.forwardKinematics(thetas, &toolPosi, &pitch); // 正向运动学
 
 ### 例程源码-机械臂正向运动学
 
+`arm_damping_mode.ino`
+
 ```cpp
 /*
  * 测试机械臂正向运动学
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/04/23
+ * 更新时间: 2021/07/15
  */
-#include <SoftwareSerial.h>
 #include "FashionStar_Arm5DoF.h"
-// 软串口的配置
-#define SOFT_SERIAL_RX 6
-#define SOFT_SERIAL_TX 7
-#define SOFT_SERIAL_BAUDRATE 4800
 
-SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX); // 创建软串口
+// 调试串口的配置
+#if defined(ARDUINO_AVR_UNO)
+    #include <SoftwareSerial.h>
+    #define SOFT_SERIAL_RX 6
+    #define SOFT_SERIAL_TX 7
+    SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX); // 创建软串口
+    #define DEBUG_SERIAL softSerial
+    #define DEBUG_SERIAL_BAUDRATE 4800
+#elif defined(ARDUINO_AVR_MEGA2560)
+    #define DEBUG_SERIAL Serial
+    #define DEBUG_SERIAL_BAUDRATE 115200
+#elif defined(ARDUINO_ARCH_ESP32)
+    #define DEBUG_SERIAL Serial
+    #define DEBUG_SERIAL_BAUDRATE 115200
+#endif 
+
 FSARM_ARM5DoF arm; //机械臂对象
 
 void testForwardKinematics(){
@@ -544,7 +550,6 @@ void testForwardKinematics(){
     thetas.theta2 = -130.0;
     thetas.theta3 = 90.0;
     thetas.theta4 = 60.0;
-    thetas.gripper = 0.0; // 爪子闭合
     arm.setAngle(thetas);  // 设置舵机旋转到特定的角度
     arm.wait();            // 等待舵机旋转到目标位置
     
@@ -552,16 +557,16 @@ void testForwardKinematics(){
     float pitch;
     arm.forwardKinematics(thetas, &toolPosi, &pitch); // 正向运动学
     // 打印正向运动学的结果
-    softSerial.println("Tool Posi: X= " + String(toolPosi.x, 1) +\
+    DEBUG_SERIAL.println("Tool Posi: X= " + String(toolPosi.x, 1) +\
          ", Y= " + String(toolPosi.y, 1) + \
          ", Z= " + String(toolPosi.z, 1));
-    softSerial.println("Pitch: " + String(pitch, 2) + "deg");
+    DEBUG_SERIAL.println("Pitch: " + String(pitch, 2) + "deg");
 
 }
 void setup(){
-    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化串口
+    DEBUG_SERIAL.begin(DEBUG_SERIAL_BAUDRATE); // 初始化串口
     arm.init(); //机械臂初始化
-    softSerial.println("Test Forward Kinematics");
+    DEBUG_SERIAL.println("Test Forward Kinematics");
     testForwardKinematics();
 }
 
@@ -583,7 +588,7 @@ Pitch: 20.00deg
 
 ### 例程源码-机械臂正向运动学+阻尼模式
 
-
+`arm_forward_kinematics_v2.ino`
 
 ```cpp
 /*
@@ -591,16 +596,26 @@ Pitch: 20.00deg
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/05/07
+ * 更新时间: 2021/07/15
  */
-#include <SoftwareSerial.h>
 #include "FashionStar_Arm5DoF.h"
-// 软串口的配置
-#define SOFT_SERIAL_RX 6
-#define SOFT_SERIAL_TX 7
-#define SOFT_SERIAL_BAUDRATE 4800
 
-SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX); // 创建软串口
+// 调试串口的配置
+#if defined(ARDUINO_AVR_UNO)
+    #include <SoftwareSerial.h>
+    #define SOFT_SERIAL_RX 6
+    #define SOFT_SERIAL_TX 7
+    SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX); // 创建软串口
+    #define DEBUG_SERIAL softSerial
+    #define DEBUG_SERIAL_BAUDRATE 4800
+#elif defined(ARDUINO_AVR_MEGA2560)
+    #define DEBUG_SERIAL Serial
+    #define DEBUG_SERIAL_BAUDRATE 115200
+#elif defined(ARDUINO_ARCH_ESP32)
+    #define DEBUG_SERIAL Serial
+    #define DEBUG_SERIAL_BAUDRATE 115200
+#endif 
+
 FSARM_ARM5DoF arm; //机械臂对象
 
 void testForwardKinematics(){
@@ -611,19 +626,18 @@ void testForwardKinematics(){
     float pitch;
     arm.forwardKinematics(thetas, &toolPosi, &pitch); // 正向运动学
     // 打印正向运动学的结果
-    softSerial.println("Tool Posi: X= " + String(toolPosi.x, 1) +\
+    DEBUG_SERIAL.println("Tool Posi: X= " + String(toolPosi.x, 1) +\
          ", Y= " + String(toolPosi.y, 1) + \
          ", Z= " + String(toolPosi.z, 1) + \
-         ", Pitch: " + String(pitch, 2) + "deg" + \
-         ", Gripper= " + String(thetas.gripper, 1));
+         ", Pitch: " + String(pitch, 2) + "deg");
 
 }
 
 void setup(){
-    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化串口
+    DEBUG_SERIAL.begin(DEBUG_SERIAL_BAUDRATE); // 初始化串口
     arm.init(); //机械臂初始化
     arm.setDamping(); //设置舵机为阻尼模式
-    softSerial.println("Test Forward Kinematics");
+    DEBUG_SERIAL.println("Test Forward Kinematics");
 }
 
 void loop(){
@@ -710,31 +724,42 @@ FSARM_STATUS code = arm.inverseKinematics(toolPosi, pitch, &thetas);
 
 ### 例程源码-机械臂逆向运动学 
 
+
+
 ```cpp
 /*
  * 测试机械臂逆向运动学
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/05/07
+ * 更新时间: 2021/07/15
  */
-
-#include <SoftwareSerial.h>
 #include "FashionStar_Arm5DoF.h"
-// 软串口的配置
-#define SOFT_SERIAL_RX 6
-#define SOFT_SERIAL_TX 7
-#define SOFT_SERIAL_BAUDRATE 4800
-// 创建软串口
-SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX);
+
+// 调试串口的配置
+#if defined(ARDUINO_AVR_UNO)
+    #include <SoftwareSerial.h>
+    #define SOFT_SERIAL_RX 6
+    #define SOFT_SERIAL_TX 7
+    SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX); // 创建软串口
+    #define DEBUG_SERIAL softSerial
+    #define DEBUG_SERIAL_BAUDRATE 4800
+#elif defined(ARDUINO_AVR_MEGA2560)
+    #define DEBUG_SERIAL Serial
+    #define DEBUG_SERIAL_BAUDRATE 115200
+#elif defined(ARDUINO_ARCH_ESP32)
+    #define DEBUG_SERIAL Serial
+    #define DEBUG_SERIAL_BAUDRATE 115200
+#endif 
+
 FSARM_ARM5DoF arm; //机械臂对象
 
 void setup(){
-    softSerial.begin(SOFT_SERIAL_BAUDRATE);
+    DEBUG_SERIAL.begin(DEBUG_SERIAL_BAUDRATE);
     arm.init(); //机械臂初始化
 
     // 测试正向运动学
-    softSerial.println("Test Forward Kinematics");
+    DEBUG_SERIAL.println("Test Forward Kinematics");
     FSARM_JOINTS_STATE_T thetas; // 关节角度
     FSARM_POINT3D_T toolPosi; // 末端位置
     float pitch; // 末端的俯仰角 (deg)
@@ -743,7 +768,6 @@ void setup(){
     thetas.theta2 = -130.0;
     thetas.theta3 = 90.0;
     thetas.theta4 = 60.0;
-    thetas.gripper = 0.0;
     arm.setAngle(thetas);  // 机械臂运动到目标角度
     arm.wait();
 
@@ -751,18 +775,18 @@ void setup(){
     // 用正向运动学的结果验证逆向运动学的结果
     arm.forwardKinematics(thetas, &toolPosi, &pitch); // 正向运动学
     // 打印正向运动学的结果
-    softSerial.println("Tool Posi: X= " + String(toolPosi.x, 1) +\
+    DEBUG_SERIAL.println("Tool Posi: X= " + String(toolPosi.x, 1) +\
          ", Y= " + String(toolPosi.y, 1) + \
          ", Z= " + String(toolPosi.z, 1));
 
     // 逆向运动学
-    softSerial.println("Test Inverse Kinematics");
+    DEBUG_SERIAL.println("Test Inverse Kinematics");
     FSARM_JOINTS_STATE_T thetas_ret; // 关节角度-逆向运动学输出的结果
 
-    softSerial.println("Pitch = "+String(pitch, 2) + " deg");
+    DEBUG_SERIAL.println("Pitch = "+String(pitch, 2) + " deg");
     FSARM_STATUS code = arm.inverseKinematics(toolPosi, pitch, &thetas_ret);
-    softSerial.println("code = "+String(code, DEC));
-    softSerial.println("thetas = [" + String(thetas_ret.theta1, 2) + ", "\
+    DEBUG_SERIAL.println("code = "+String(code, DEC));
+    DEBUG_SERIAL.println("thetas = [" + String(thetas_ret.theta1, 2) + ", "\
         + String(thetas_ret.theta2, 2) + ", "\
         + String(thetas_ret.theta3, 2) + ", "\
         + String(thetas_ret.theta4, 2) + "]");
@@ -849,7 +873,7 @@ arm.wait();
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/05/07
+ * 更新时间: 2021/07/15
  */
 #include "FashionStar_Arm5DoF.h"
 
@@ -884,41 +908,27 @@ void loop(){
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/05/07
+ * 更新时间: 2021/07/15
  */
 #include "FashionStar_Arm5DoF.h"
 
-#define GRIPPER_OPEN 20.0  // 爪子张开的角度
-#define GRIPPER_CLOSE 11.5 // 爪子闭合
 
 FSARM_ARM5DoF arm; //机械臂对象
-
-// 爪子张开
-void gripperOpen(){
-    arm.setAngle(FSARM_GRIPPER, GRIPPER_OPEN); // 设置爪子的角度,爪子张开
-    arm.wait();
-}
-
-// 爪子闭合
-void gripperClose(){
-    arm.setAngle(FSARM_GRIPPER, GRIPPER_CLOSE); // 设置爪子的角度,爪子张开
-    arm.wait();
-}
 
 // 运行动作组
 void run_action_group(){
     // 复位
     arm.move(13.5, 0, 5, 25.0, true);
     // 抬起物块
-    gripperOpen();
+    arm.gripperOpen();
     arm.move(14.0, 0, -4.0, 55.0, true);
     arm.move(15.6, 0, -7.8, 66.0, true);
-    gripperClose();
+    arm.gripperClose();
     arm.move(14.0, 0, -4.0, 55.0, true);
     // 放下物块
     arm.move(15.4, -10.0, -4.0, 55.0, true);
     arm.move(15.4, -10.0, -7.8, 66.0, true);
-    gripperOpen();
+    arm.gripperOpen();
     arm.move(15.4, -10.0, -4.0, 55.0, true);
     // 复位
     arm.move(13.5, 0, 5, 25.0, true);
