@@ -27,7 +27,7 @@
 FSARM_ARM5DoF arm; //机械臂对象
 
 void setup(){
-    DEBUG_SERIAL.begin(DEBUG_SERIAL_BAUDRATE); // 初始化软串口的波特率
+    DEBUG_SERIAL.begin(DEBUG_SERIAL_BAUDRATE); // 初始化串口的波特率
     arm.init(); //机械臂初始化
     arm.setDamping(); //设置舵机为阻尼模式
 }

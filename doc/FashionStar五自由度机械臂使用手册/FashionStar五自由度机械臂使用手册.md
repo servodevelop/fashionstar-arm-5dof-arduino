@@ -108,7 +108,7 @@ SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX);
 
 void setup(){
     
-    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化软串口的波特率
+    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化串口的波特率
 }
 
 void loop(){
@@ -153,7 +153,7 @@ SoftwareSerial softSerial(SOFT_SERIAL_RX, SOFT_SERIAL_TX); // 创建软串口
 FSARM_ARM5DoF arm; //机械臂对象
 
 void setup(){
-    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化软串口的波特率
+    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化串口的波特率
     arm.init(); //机械臂初始化
     arm.setDamping(); //设置舵机为阻尼模式
 }
@@ -559,7 +559,7 @@ void testForwardKinematics(){
 
 }
 void setup(){
-    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化软串口
+    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化串口
     arm.init(); //机械臂初始化
     softSerial.println("Test Forward Kinematics");
     testForwardKinematics();
@@ -620,7 +620,7 @@ void testForwardKinematics(){
 }
 
 void setup(){
-    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化软串口
+    softSerial.begin(SOFT_SERIAL_BAUDRATE); // 初始化串口
     arm.init(); //机械臂初始化
     arm.setDamping(); //设置舵机为阻尼模式
     softSerial.println("Test Forward Kinematics");

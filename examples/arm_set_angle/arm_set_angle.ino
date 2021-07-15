@@ -19,7 +19,6 @@ void loop(){
     thetas.theta2 = -130.0;
     thetas.theta3 = 90.0;
     thetas.theta4 = 60.0;
-    thetas.gripper = 45.0; // 爪子的角度
 
     // 设置
     arm.setAngle(thetas);  // 设置舵机旋转到特定的角度
@@ -27,8 +26,11 @@ void loop(){
     
     delay(1000); // 等待1s
 
-    thetas.theta1 = 90.0;
-    thetas.gripper = 0.0; // 爪子的角度
+    thetas.theta1 = -90.0;
+    thetas.theta2 = -130.0;
+    thetas.theta3 = 120.0;
+    thetas.theta4 = 30.0;
+    
     arm.setAngle(thetas);  // 设置舵机旋转到特定的角度
     arm.wait();            // 等待舵机旋转到目标位置
     delay(1000);

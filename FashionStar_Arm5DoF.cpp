@@ -14,11 +14,12 @@ FSARM_ARM5DoF::FSARM_ARM5DoF(){
 
 // 初始化
 void FSARM_ARM5DoF::init(){
-    this->protocol.init(115200); // 初始化通信协议
-    initServos(); // 初始化所有的舵机
-    calibration(); // 机械臂标定
-    setAngleRange(); // 设置舵机角度范围
-    setSpeed(100); // 初始化舵机的转速
+    this->protocol.init(115200);    // 初始化通信协议
+    initServos();                   // 初始化所有的舵机
+    calibration();                  // 机械臂标定
+    setAngleRange();                // 设置舵机角度范围
+    setSpeed(100);                  // 初始化舵机的转速
+    gripperClose();                 // 爪子闭合
 }
 
 // 初始化舵机
