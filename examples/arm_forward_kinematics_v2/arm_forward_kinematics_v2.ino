@@ -3,7 +3,7 @@
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/05/07
+ * 更新时间: 2021/07/15
  */
 #include <SoftwareSerial.h>
 #include "FashionStar_Arm5DoF.h"

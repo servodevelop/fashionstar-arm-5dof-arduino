@@ -3,7 +3,7 @@
  * --------------------------
  * 作者: 阿凯|Kyle
  * 邮箱: kyle.xing@fashionstar.com.hk
- * 更新时间: 2020/05/07
+ * 更新时间: 2021/07/15
  */
 #include "FashionStar_Arm5DoF.h"
 
@@ -26,7 +26,7 @@ void loop(){
     arm.wait();            // 等待舵机旋转到目标位置
     
     delay(1000); // 等待1s
-    
+
     thetas.theta1 = 90.0;
     thetas.gripper = 0.0; // 爪子的角度
     arm.setAngle(thetas);  // 设置舵机旋转到特定的角度

@@ -1,5 +1,13 @@
 #ifndef _FASHION_STAR_ARM5DOF_H
 #define _FASHION_STAR_ARM5DOF_H
+/*
+ * FashionStar 五自由度机械臂SDK (Arduino)
+ * --------------------------
+ * 作者: 阿凯|Kyle
+ * 邮箱: kyle.xing@fashionstar.com.hk
+ * 更新时间: 2021/07/15
+ */
+
 #include "Arduino.h"
 #include "FashionStar_UartServoProtocol.h"
 #include "FashionStar_UartServo.h"

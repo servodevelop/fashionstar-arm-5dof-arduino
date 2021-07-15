@@ -1,3 +1,11 @@
+/*
+ * FashionStar 五自由度机械臂SDK (Arduino)
+ * --------------------------
+ * 作者: 阿凯|Kyle
+ * 邮箱: kyle.xing@fashionstar.com.hk
+ * 更新时间: 2021/07/15
+ */
+
 #include "FashionStar_Arm5DoF.h"
 
 FSARM_ARM5DoF::FSARM_ARM5DoF(){
@@ -53,6 +61,8 @@ void FSARM_ARM5DoF::setDamping(){
     for(uint8_t sidx=0; sidx < FSARM_SERVO_NUM; sidx++){
         this->servos[sidx].setDamping(1000);
     }
+
+    this->gripper_servo.setDamping(1000);
 }
 
 // 设置所有舵机的转速
@@ -72,7 +82,6 @@ void FSARM_ARM5DoF::queryRawAngle(FSARM_JOINTS_STATE_T* thetas){
     thetas->theta2 = this->servos[FSARM_JOINT2].queryRawAngle();
     thetas->theta3 = this->servos[FSARM_JOINT3].queryRawAngle();
     thetas->theta4 = this->servos[FSARM_JOINT4].queryRawAngle();
-
 }
 
 // 读取角度
