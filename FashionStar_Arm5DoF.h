@@ -36,8 +36,8 @@
 #define FSARM_LINK4 13.6    // 连杆4的长度 单位cm(算上了爪子的长度)
 
 // 舵机标定参数
-#define FSARM_JOINT1_P90 -85.10  //关节1为90°时的舵机原始角度
-#define FSARM_JOINT1_N90 90.23   //关节1为-90°时的舵机原始角度
+#define FSARM_JOINT1_P90 -90.70  //关节1为90°时的舵机原始角度
+#define FSARM_JOINT1_N90 91.9    //关节1为-90°时的舵机原始角度
 #define FSARM_JOINT2_P0  90.80   //关节2为0°时的舵机原始角度
 #define FSARM_JOINT2_N90 0.90    //关节2为-90°时的舵机原始角度
 #define FSARM_JOINT3_P90 -45.5   //关节3为90°时的舵机原始角度
